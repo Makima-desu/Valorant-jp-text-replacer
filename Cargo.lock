@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "testing-out"
+name = "valorant-text-replacer"
 version = "0.1.0"

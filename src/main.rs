@@ -1,5 +1,6 @@
-use std::fs;
+use std::io;
 use std::error::Error;
+use std::fs;
 
 fn find_valorant_path(file_name: &String) -> Result<String, Box<dyn Error>>
 {
@@ -47,26 +48,33 @@ fn get_path() -> Result<String, Box<dyn Error>>
     return find_valorant_path(&file_name);
 }
 
-fn move_files(valorant_path: &Result<String, Box<dyn Error>>)
+fn move_files(valorant_path: &Result<String, Box<dyn Error>>) -> Result<(), Box<dyn Error>>
 {
     let path = valorant_path.as_ref().unwrap();
-    match fs::copy("Paks/jp/ja_JP_Text-WindowsClient.pak", path.to_string() + &"\\ja_JP_Text-WindowsClient.pak".to_string())
+
+    match fs::copy("./Paks/jp/ja_JP_Text-WindowsClient.pak", path.to_owned() + "\\ja_JP_Text-WindowsClient.pak")
     {
         Err(e) => println!("{:?}", e),
-        _ => {}
+        _ => println!("Moved pak")
+
     }
-    match fs::copy("Paks/jp/ja_JP_Text-WindowsClient.sig", path.to_string() + &"\\ja_JP_Text-WindowsClient.sig".to_string())
+    match fs::copy("./Paks/jp/ja_JP_Text-WindowsClient.sig", path.to_owned() + "\\ja_JP_Text-WindowsClient.sig")
     {
         Err(e) => println!("{:?}", e),
-        _ => {}
+        _ => println!("Moved sig")
     }
+
+
+    return Ok(());
 
 }
 
 fn main()
 {
     let valorant_path = get_path();
-    move_files(&valorant_path)
+    move_files(&valorant_path);
+    println!("Press any key to close this window.");
+    io::stdin().read_line(&mut String::new()).unwrap();
     // println!("{:?}", valorant_path.unwrap())
 
 }
